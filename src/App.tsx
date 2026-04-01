@@ -168,7 +168,8 @@ export default function App() {
               <div className="relative z-10 w-full flex flex-col items-center text-center px-4 hero-content">
 
                 <h2 className="text-3xl md:text-5xl font-bold text-center hero-title">
-                  Surpreenda quem você ama
+                  <span className="block">Surpreenda</span>
+                  <span className="block hero-title-second-line">quem você ama</span>
                 </h2>
 
                 <p className="mt-3 opacity-80 max-w-xl text-center hero-subtitle">
@@ -195,7 +196,7 @@ export default function App() {
 
             {/* GALERIA */}
             {/* GALERIA CARROSSEL */}
-            <div className="mt-10 relative flex items-center justify-center">
+            <div className="mt-2.5 md:mt-3 relative flex items-center justify-center">
 
               {/* BOTÃO ESQUERDA */}
               <button

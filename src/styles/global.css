@@ -90,8 +90,12 @@ header.sticky + main {
 }
 
 .hero-title {
-  max-width: 13ch;
+  max-width: 16ch;
   line-height: 1.05;
+}
+
+.hero-title-second-line {
+  white-space: nowrap;
 }
 
 .hero-subtitle {
@@ -301,7 +305,8 @@ a.flex.items-center.gap-4.bg-white\/10.px-6.py-3.rounded-xl.hover\:scale-105.tra
   }
 
   .hero-title {
-    font-size: 2rem !important;
+    font-size: 1.7rem !important;
+    max-width: 17ch;
   }
 
   .hero-subtitle {
@@ -453,8 +458,8 @@ a.flex.items-center.gap-4.bg-white\/10.px-6.py-3.rounded-xl.hover\:scale-105.tra
   }
 
   .hero-title {
-    font-size: 1.45rem !important;
-    max-width: 10ch;
+    font-size: 1.18rem !important;
+    max-width: 17ch;
   }
 
   .hero-subtitle {
