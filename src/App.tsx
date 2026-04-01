@@ -13,6 +13,7 @@ export default function App() {
   const [tab, setTab] = useState("home");
   const [selected, setSelected] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHeaderCompact, setIsHeaderCompact] = useState(false);
   const whatsappMsg =
     "Olá! Vim pelo site e quero mais informações sobre as tele mensagens 💖";
 
@@ -58,6 +59,22 @@ export default function App() {
     return () => clearInterval(interval);
   }, [isHovered]);
 
+  useEffect(() => {
+    const handleHeaderState = () => {
+      const isDesktop = window.innerWidth > 768;
+      setIsHeaderCompact(isDesktop && window.scrollY > 60);
+    };
+
+    handleHeaderState();
+    window.addEventListener("scroll", handleHeaderState, { passive: true });
+    window.addEventListener("resize", handleHeaderState);
+
+    return () => {
+      window.removeEventListener("scroll", handleHeaderState);
+      window.removeEventListener("resize", handleHeaderState);
+    };
+  }, []);
+
   const goToTop = () => {
     window.scrollTo({
       top: 0,
@@ -69,7 +86,7 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-black via-purple-950 to-fuchsia-900 text-white">
 
       {/* HEADER */}
-      <header className="sticky top-0 z-50 backdrop-blur bg-black/40 border-b border-white/20">
+      <header className={`sticky top-0 z-50 backdrop-blur bg-black/40 border-b border-white/20 site-header ${isHeaderCompact ? "is-compact" : ""}`}>
         <div className="p-4 flex justify-between items-center max-w-5xl mx-auto">
 
           <h1
@@ -77,9 +94,13 @@ export default function App() {
               setTab("home");
               goToTop();
             }}
-            className="text-3xl font-bold cursor-pointer hover:opacity-80 transition"
+            className="text-3xl font-bold cursor-pointer hover:opacity-80 transition logo-title"
           >
-            Melody Mensagens
+            <img
+              src="/Logo Melody.png"
+              alt="Melody Mensagens"
+              className="logo-image"
+            />
           </h1>
 
           <nav className="flex gap-4 md:gap-6 text-sm md:text-base">
@@ -119,39 +140,44 @@ export default function App() {
         {/* HOME */}
         {tab === "home" && (
           <div>
+            <div className="top-branding">
+            
+              <h2 className="top-branding-title">Melody Mensagens</h2>
+              <p className="top-branding-kicker">Telemensagens em Porto Alegre e região</p>
+            </div>
 
             {/* HERO */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="relative h-80 flex items-center justify-center rounded-xl overflow-hidden"
+              className="relative h-80 flex items-center justify-center rounded-xl overflow-hidden hero-banner"
             >
 
               {/* IMAGEM */}
               <div className="absolute inset-0">
                 <img
                   src="/carro.jpg"
-                  className="w-full h-full object-cover opacity-60"
+                  className="w-full h-full object-cover opacity-50"
                 />
               </div>
 
               {/* OVERLAY */}
-              <div className="absolute inset-0 bg-black/60"></div>
+              <div className="absolute inset-0 bg-black/50"></div>
 
               {/* CONTEÚDO */}
-              <div className="relative z-10 w-full flex flex-col items-center text-center px-4">
+              <div className="relative z-10 w-full flex flex-col items-center text-center px-4 hero-content">
 
-                <h2 className="text-3xl md:text-5xl font-bold text-center">
+                <h2 className="text-3xl md:text-5xl font-bold text-center hero-title">
                   Surpreenda quem você ama
                 </h2>
 
-                <p className="mt-3 opacity-80 max-w-xl text-center">
+                <p className="mt-3 opacity-80 max-w-xl text-center hero-subtitle">
                   Mensagens ao vivo, emocionantes e inesquecíveis em Porto Alegre e região.
                 </p>
 
                 <button
                   onClick={() => openWhats("Quero fazer uma surpresa especial  ")}
-                  className="mt-6 bg-green-500 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transition shadow-lg"
+                  className="mt-6 bg-green-500 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transition shadow-lg hero-cta"
                 >
                   Falar no WhatsApp
                 </button>
@@ -221,16 +247,13 @@ export default function App() {
                         }
           `}
                       style={{
-                        left:
-                          position === "center"
-                            ? "50%"
-                            : position === "left"
-                              ? "15%"
-                              : "85%",
+                        left: "50%",
                         transform:
                           position === "center"
                             ? "translateX(-50%)"
-                            : "translateX(-50%) scale(0.9)",
+                            : position === "left"
+                              ? "translateX(-120%) scale(0.9)"
+                              : "translateX(20%) scale(0.9)",
                       }}
                     />
                   );
@@ -319,18 +342,18 @@ A todos que já viveram essa experiência conosco, nosso muito obrigado! E para 
                 </motion.div>
               )}
             </AnimatePresence>
-             <div className="mt-16 text-center">
-      <h2 className="text-2xl md:text-3xl font-bold">
-        Momentos que Marcaram — Veja o que nossos Clientes dizem
-      </h2>
-    </div>
+            <div className="mt-16 text-center">
+              <h2 className="text-2xl md:text-3xl font-bold">
+                Momentos que Marcaram — Veja o que nossos Clientes dizem
+              </h2>
+            </div>
 
-    <Reviews />
+            <Reviews />
 
 
           </div>
 
-          
+
         )}
 
         {/* SERVIÇOS */}
@@ -425,7 +448,7 @@ A todos que já viveram essa experiência conosco, nosso muito obrigado! E para 
           <a
             href="https://www.instagram.com/melodymensagens?igsh=MWVvN2t2ZnI3cXZ5NA=="
             target="_blank"
-            className="flex items-center gap-4 bg-white/10 px-6 py-3 rounded-xl hover:scale-105 transition"
+            className="flex items-center gap-4 bg-white/10 px-6 py-3 rounded-xl hover:scale-105 transition "
           >
             <img src="/instagram.png" className="w-8 h-8" />
             <span className="text-lg">Instagram</span>
