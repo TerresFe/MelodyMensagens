@@ -86,8 +86,8 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-black via-purple-950 to-fuchsia-900 text-white">
 
       {/* HEADER */}
-      <header className={`sticky top-0 z-50 backdrop-blur bg-black/40 border-b border-white/20 site-header ${isHeaderCompact ? "is-compact" : ""}`}>
-        <div className="p-4 flex justify-between items-center max-w-5xl mx-auto">
+      <header className={`sticky top-0 z-50 backdrop-blur bg-black/40 site-header ${isHeaderCompact ? "is-compact" : ""}`}>
+        <div className="px-4 py-[1.15rem] flex justify-between items-center max-w-5xl mx-auto">
 
           <h1
             onClick={() => {
@@ -135,7 +135,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto p-4 space-y-10">
+      <main className="max-w-5xl mx-auto px-4 pb-4 pt-4 md:pt-5 space-y-10">
 
         {/* HOME */}
         {tab === "home" && (

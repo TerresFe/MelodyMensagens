@@ -45,7 +45,7 @@ header.sticky > div nav {
 }
 
 header.sticky + main {
-  margin-top: 5.05rem;
+  margin-top: 4.45rem;
 }
 
 .logo-title {
@@ -230,7 +230,7 @@ a.flex.items-center.gap-4.bg-white\/10.px-6.py-3.rounded-xl.hover\:scale-105.tra
 /* Responsividade sem alterar JSX/textos */
 @media (max-width: 768px) {
   header.sticky + main {
-    margin-top: 5.5rem;
+    margin-top: 5rem;
   }
 
   header > div {
@@ -385,7 +385,7 @@ a.flex.items-center.gap-4.bg-white\/10.px-6.py-3.rounded-xl.hover\:scale-105.tra
 
 @media (max-width: 480px) {
   header.sticky + main {
-    margin-top: 5.2rem;
+    margin-top: 4.7rem;
   }
 
   header > div {
