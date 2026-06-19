@@ -147,10 +147,10 @@ export default function App() {
           <AnimatePresence mode="wait">
             <motion.div
               key={tab}
-              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, filter: "blur(7px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12, filter: "blur(5px)" }}
-              transition={{ duration: reduceMotion ? 0.15 : 0.4 }}
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              transition={{ duration: reduceMotion ? 0.15 : 0.3 }}
             >
               {tab === "home" && <Home />}
               {tab === "texts" && <Texts />}

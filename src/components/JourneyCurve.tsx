@@ -23,6 +23,8 @@ export default function JourneyCurve({ progress }: JourneyCurveProps) {
   const travelerY = useMotionValue(0);
 
   const updateTraveler = useCallback(() => {
+    if (window.innerWidth <= 700) return;
+
     const curveElement = curveRef.current;
     const path = pathRef.current;
     if (!curveElement || !path) return;
