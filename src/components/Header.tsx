@@ -1,4 +1,8 @@
-export default function Header({ setTab }: any) {
+interface HeaderProps {
+  setTab: (tab: "home" | "texts" | "packages") => void;
+}
+
+export default function Header({ setTab }: HeaderProps) {
   return (
     <header className="p-6 flex justify-between items-center border-b border-white/20 backdrop-blur-md bg-black/30 sticky top-0 z-50">
       <h1 className="text-3xl font-bold">Melody Mensagens</h1>

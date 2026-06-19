@@ -1,119 +1,73 @@
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
 import { textos } from "../data/textos";
 
-
+type TextItem = (typeof textos)[number];
 
 export default function Texts() {
-
-  <div>
-    <h1>Textos</h1>
-  </div>
-
-  const [categoria, setCategoria] = useState("Todos");
-  const [selecionado, setSelecionado] = useState<any>(null);
-
-  const categorias = ["Todos", ...new Set(textos.map(t => t.categoria))];
-
-  const textosFiltrados =
-    categoria === "Todos"
-      ? textos
-      : textos.filter(t => t.categoria === categoria);
-
-  const whatsappBase = "https://wa.me/5551984357011";
+  const [category, setCategory] = useState("Todos");
+  const [selected, setSelected] = useState<TextItem | null>(null);
+  const reduceMotion = useReducedMotion();
+  const categories = ["Todos", ...new Set(textos.map((text) => text.categoria))];
+  const filteredTexts = category === "Todos" ? textos : textos.filter((text) => text.categoria === category);
 
   return (
-    <div className="p-6">
+    <section className="page-section texts-page" aria-labelledby="texts-title">
+      <div className="section-heading page-heading">
+        <span className="eyebrow">Palavras que emocionam</span>
+        <h1 id="texts-title">Encontre o texto certo para o momento</h1>
+        <p>Escolha uma inspiração e personalize a mensagem para contar a sua história.</p>
+      </div>
 
-      {/* TÍTULO */}
-      <h2 className="text-3xl font-bold text-center mb-6">
-        Escolha seu texto 💖
-      </h2>
-
-      {/* CATEGORIAS */}
-      <div className="flex gap-2 mb-6 flex-wrap justify-center">
-        {categorias.map((cat, i) => (
-          <button
-            key={i}
-            onClick={() => setCategoria(cat)}
-            className={`px-4 py-2 rounded-full border ${categoria === cat
-                ? "bg-white text-black"
-                : "bg-white/10 hover:bg-white/20"
-              }`}
-          >
-            {cat}
+      <div className="category-list" aria-label="Filtrar textos por categoria">
+        {categories.map((item) => (
+          <button key={item} className={category === item ? "active" : ""} onClick={() => setCategory(item)} aria-pressed={category === item}>
+            {item}
           </button>
         ))}
       </div>
 
-      {/* LISTA */}
-      <div className="space-y-4">
-        {textosFiltrados.map((t, i) => (
-          <div
-            key={i}
-            onClick={() => setSelecionado(t)}
-            className="bg-white/10 p-5 rounded-xl cursor-pointer hover:bg-white/20 transition"
-          >
-            <h3 className="font-bold text-lg">{t.titulo}</h3>
-            <p className="text-sm opacity-70">{t.categoria}</p>
-
-            <p className="mt-2 text-sm opacity-60">
-              {t.conteudo.slice(0, 100)}...
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* MODAL */}
-      <AnimatePresence>
-        {selecionado && (
-          <motion.div
-            className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelecionado(null)}
-          >
-            <motion.div
-              className="bg-gradient-to-br from-purple-900 via-pink-800 to-black p-6 rounded-xl max-w-xl w-full"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              onClick={(e) => e.stopPropagation()}
+      <motion.div className="texts-list" layout>
+        <AnimatePresence mode="popLayout">
+          {filteredTexts.map((text, index) => (
+            <motion.button
+              layout
+              key={`${text.categoria}-${text.titulo}`}
+              className="text-card"
+              onClick={() => setSelected(text)}
+              initial={{ opacity: 0, scale: reduceMotion ? 1 : .96, y: reduceMotion ? 0 : 24 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true, amount: .15 }}
+              whileHover={reduceMotion ? undefined : { y: -8, scale: 1.012, boxShadow: "0 24px 50px rgba(0,0,0,.34)" }}
+              whileTap={reduceMotion ? undefined : { scale: .99 }}
+              exit={{ opacity: 0, scale: .96 }}
+              transition={{ delay: reduceMotion ? 0 : Math.min(index * .035, .3), duration: reduceMotion ? .01 : .42, ease: "easeOut" }}
             >
-              <h2 className="text-2xl font-bold">
-                {selecionado.titulo}
-              </h2>
+              <h3>{text.titulo}</h3>
+              <small>{text.categoria}</small>
+              <p>{text.conteudo.slice(0, 120)}…</p>
+            </motion.button>
+          ))}
+        </AnimatePresence>
+      </motion.div>
 
-              <p className="text-sm opacity-70 mb-4">
-                {selecionado.categoria}
-              </p>
-
-              <p className="text-sm leading-relaxed whitespace-pre-line">
-                {selecionado.conteudo}
-              </p>
-
-              {/* BOTÃO WHATS */}
-              <a
-                href={`${whatsappBase}?text=${encodeURIComponent(
-                  `Gostei desse texto   (${selecionado.titulo}): ${selecionado.conteudo}`
-                )}`}
-                target="_blank"
-                className="block mt-6 bg-green-500 text-center p-3 rounded-lg font-semibold hover:bg-green-600"
-              >
-                Usar este texto no WhatsApp 📲
-              </a>
-
-              {/* FECHAR */}
-              <button
-                onClick={() => setSelecionado(null)}
-                className="mt-3 w-full text-sm opacity-70 hover:opacity-100"
-              >
-                Fechar
-              </button>
+      {createPortal(
+        <AnimatePresence>
+          {selected && (
+            <motion.div className="image-modal" role="dialog" aria-modal="true" aria-labelledby="selected-text-title" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelected(null)}>
+              <motion.div className="text-modal-panel" initial={{ opacity: 0, scale: .9, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: .94 }} onClick={(event) => event.stopPropagation()}>
+                <button className="modal-close text-modal-close" onClick={() => setSelected(null)} aria-label="Fechar texto">×</button>
+                <span className="eyebrow">{selected.categoria}</span>
+                <h2 id="selected-text-title">{selected.titulo}</h2>
+                <p>{selected.conteudo}</p>
+                <a className="primary-button" href={`https://wa.me/5551984357011?text=${encodeURIComponent(`Gostei deste texto (${selected.titulo}): ${selected.conteudo}`)}`} target="_blank" rel="noreferrer">Usar no WhatsApp <span>↗</span></a>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
+    </section>
   );
 }
