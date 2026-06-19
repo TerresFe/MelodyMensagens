@@ -226,7 +226,8 @@ img { display: block; max-width: 100%; }
   .hero-copy { width: 100%; padding: 2rem 1.4rem 7rem; transform: none; }
   .hero-copy h1 { font-size: clamp(2.5rem, 13vw, 4.4rem); }
   .hero-copy h1 span { display: inline; }
-  .hero-proof { left: 1.4rem; right: auto; bottom: 1.3rem; padding: .65rem .8rem; }
+  .hero-copy h1 span { color: #ffafd4; background: none; -webkit-text-fill-color: #ffafd4; }
+  .hero-proof { left: 50%; right: auto; bottom: 1.3rem; min-width: min(240px, calc(100% - 2.8rem)); padding: .65rem .8rem; align-items: center; text-align: center; transform: translateX(-50%); }
   .scroll-cue { display: none; }
   .hero-orb { opacity: .5; }
   .home-journey { perspective: 1100px; }
